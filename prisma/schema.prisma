@@ -9,6 +9,33 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./cloudinary-hackathon.db"
+}
+
+
+model Filter {
+  id                    Int      @id @default(autoincrement())
+  name                  String  
+  description           String
+  prompt                String
+  public_id             String
+  width                 Int
+  height                Int
+  example               String
+  created_at            DateTime @default(now())
+  updated_at            DateTime @default(now())
+
+  Image Image[]
+}
+
+model Image {
+  id                    Int      @id @default(autoincrement())
+  original_url          String
+  public_id             String
+  url                   String
+  created_at            DateTime @default(now())
+  updated_at            DateTime @default(now())
+  filterId              Int
+  filter                Filter?  @relation(fields: [filterId], references: [id])
 }
